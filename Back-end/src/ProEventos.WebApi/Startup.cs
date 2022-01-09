@@ -26,15 +26,16 @@ namespace ProEventos.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            #region Swagger
+            services.AddControllers(); // Adicionando o serviço de controllers
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEventos.WebApi", Version = "v1" });
             });
+            #endregion
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -50,13 +51,22 @@ namespace ProEventos.WebApi
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseRouting(); //Configurando o uso de rotas
+
+            #region  Cors
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyMethod() // allow any method
+                .AllowAnyHeader() // allow any Header
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+            #endregion
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers(); //Criando o mapeamento de controllers e gerando os endpoints
             });
         }
     }

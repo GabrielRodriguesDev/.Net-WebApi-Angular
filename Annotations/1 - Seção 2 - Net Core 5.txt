@@ -10,6 +10,23 @@ Observações {
 
 		5.0.404
 	}
+
+	Arquivo launchSettings.json {
+		As configurações que estão presentes neste arquivo serão usadas quando executarmos o aplicativo .NET Core
+		 a partir do Visual Studio ou usando .NET Core CLI.
+
+		O ponto mais importante que você precisa ter em mente é que o arquivo launchSettings.json só é usado na máquina de desenvolvimento local. 
+		 Isso significa que esse arquivo não é necessário ao publicar nosso aplicativo principal asp.net no servidor de produção.
+
+		Se você tiver certas configurações e quiser que seu aplicativo use essas configurações ao publicar e implantar seu aplicativo
+		 principal do asp.net no servidor de produção, será necessário armazenar essas configurações no arquivo appsettings.json. 
+		 Geralmente, no aplicativo ASP.NET Core, as definições de configuração serão armazenadas no arquivo appsettings.json. 
+
+		O ponto que você precisa lembrar é que quando você executa o aplicativo a partir do Visual Studio pressionando  CTRL + F5  
+		 ou apenas  F5 , por padrão, o perfil com  “commandName”: “IISExpress”  será usado. Por outro lado, se você executar o 
+		 aplicativo ASP.NET Core usando .NET Core CLI (ou seja, comando dotnet run), o perfil com o  “commandName”: “Project”  será usado,
+		 e com isso ele diferencia qual servidor ele deve usar para realizar a execução do programa.
+	}
 	
 	
 	
