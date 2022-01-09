@@ -31,9 +31,10 @@ namespace ProEventos.WebApi
             #region DbContext
             services.AddDbContext<DataContext>(context =>
             {
-                context.UseSqlite(Configuration.GetConnectionString("Default"));
+                context.UseMySql(Configuration.GetConnectionString("Default"), ServerVersion.AutoDetect(Configuration.GetConnectionString("Default")));
             });
             #endregion
+
             #region Swagger
             services.AddControllers(); // Adicionando o serviço de controllers
             services.AddSwaggerGen(c =>
