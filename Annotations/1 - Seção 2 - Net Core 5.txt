@@ -1,0 +1,16 @@
+Observações {
+
+	Trabalhando com versões de sdk {
+		
+		Caso queiramos exemplificar qual é a versão no qual nosso projeto vai rodar, podemos criar o arquivo "global.json" (podemos fazer isso via CLI (Olhar na documentação)) que é um arquivo de versão do sdk, claro que para funcionar	
+		precisamos ter a sdk instalada localmente, mas configurando o global.json ao realizar o build ou qualquer comando dotnet dentro do diretório o compilador olha o arquivo de versão
+		e identifica qual é a sdk que deve usar para aquele projeto (posso ter muitas sdk instaladas na máquina).
+
+		Mais informaçõe sobre o global.json: https://docs.microsoft.com/pt-br/dotnet/core/tools/global-json?tabs=netcore3x 
+
+		5.0.404
+	}
+	
+	
+	
+}
