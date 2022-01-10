@@ -1,0 +1,7 @@
+Estrutra {
+    1. Ao iniciar um projeto existente, ao primeiro contato é aconselhavél, conferir o arquivo
+    package-json e analisar a seção "scripts" do json, a fim de validar se existem comandos diferentes,
+    comandos que não são os padrões.
+
+    2. Quando instalamos algum pacote npm ele insere as informaçõe no arquivo package.json
+}

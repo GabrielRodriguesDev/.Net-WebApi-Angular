@@ -28,6 +28,9 @@ namespace ProEventos.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddControllers(); // Adicionando o serviço de controllers
+
             #region DbContext
             services.AddDbContext<DataContext>(context =>
             {
@@ -36,10 +39,21 @@ namespace ProEventos.WebApi
             #endregion
 
             #region Swagger
-            services.AddControllers(); // Adicionando o serviço de controllers
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEventos.WebApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "ProEventos.WebApi",
+                    Version = "v1",
+                    Description = "Projeto de estudo.",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Gabriel Silva Rodrigues Mota",
+                        Email = "gabriel.rodrigues.mota@outlook.com",
+                        Url = new Uri("https://github.com/GabrielRodriguesDev/.Net-WebApi-Angular")
+                    }
+                });
             });
             #endregion
         }
@@ -55,8 +69,11 @@ namespace ProEventos.WebApi
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProEventos.WebApi v1");
                     c.RoutePrefix = string.Empty;
+                    c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
                 });
             }
+
+            app.UseStaticFiles(); //permite que os arquivos estáticos sejam atendidos: SwaggerDark.css
 
             app.UseHttpsRedirection();
 
@@ -65,10 +82,10 @@ namespace ProEventos.WebApi
             #region  Cors
             // global cors policy
             app.UseCors(x => x
-                .AllowAnyMethod() // allow any method
-                .AllowAnyHeader() // allow any Header
-                .SetIsOriginAllowed(origin => true) // allow any origin
-                .AllowCredentials()); // allow credentials
+                .AllowAnyMethod() // permitir qualquer método
+                .AllowAnyHeader() // permitir qualquer Header
+                .SetIsOriginAllowed(origin => true) // permitir qualquer origem
+                .AllowCredentials()); // permite credenciais
             #endregion
 
             app.UseAuthorization();
