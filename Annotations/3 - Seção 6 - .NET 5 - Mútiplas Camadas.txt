@@ -1,0 +1,119 @@
+Mútiplas camadas no ASP. NET  {
+    Vantagens de usar mútiplas camadas {
+        Dividir o projeto por responsabilidades(camadas), onde um terá a responsabilidade,
+        de infraestrutura (conexão com banco, consulta a servidor de assets), a outra camada,
+        das regras de negócio dos sistema... etc.
+    }
+
+    Modelagem de dominio {
+        Dominio principal -> Evento
+            Agregado (Entidade) -> Palestrante
+            Agregado (Entidade) -> Lote
+            Agregado (Entidade) -> Rede Social
+
+    }
+
+    Modelando a estrtura do projeto de ProEventos {
+        Back - End utilizando a arquitetura em camada, separando em 4 projetos sendo eles
+        um do tipo WebAPI e três do tipo classlib.
+
+        O WebAPI será a entrada do cliente, portanto é o projeto que detém as controllers
+
+        O classlib (ProEventos.Application) é a camada de serviços, aonde ficará as regras de negócio.
+            O projeto WebAPI se comunica diretamente com essa classe.
+
+        O classlib (ProEventos.Persistence) é a camada onde temos a persistencia dos dados (Banco de dados)
+            A camada de Application se comunica diretamente com essa camada.
+            Application sabe da existencia do Persistence mas o Persistence não sabe da existencia
+            de Application.
+
+        O classlib (ProEventos.Domain) é o core do projeto é ae onde modelamos as entidades do projeto.
+            Toda as camadas podem se comunicar com essa camada, para terem o acesso aos tipos das entidades
+            E com isso poder gerenciar e tipar melhor o projeto
+
+    }
+
+    Configuração de camadas {
+
+        Todas as camadas são configuradas dentro de uma mesma solution (solução).
+            dotnet sln  .\ProEventos.sln add ProEventos.Application 
+            dotnet sln  .\ProEventos.sln add .\ProEventos.Domain\ 
+            dotnet sln  .\ProEventos.sln add .\ProEventos.Persistence\    
+            dotnet sln  .\ProEventos.sln add .\ProEventos.WebApi\                                  
+
+        E as camadas se referenciam, para poderem acessar umas as outras.
+
+        Referencias {
+            WebAPI se referencia com Application (WebAPI depende de Application)
+                dotnet add .\ProEventos.WebApi\ reference .\ProEventos.Application
+
+            Application se referencia com Domain (Application depende de Domain)
+                dotnet add .\ProEventos.Application\ reference .\ProEventos.Domain\ 
+
+            Application se refencia com Persistence (Application depende de Application)
+                dotnet add .\ProEventos.Application\ reference .\ProEventos.Persistence\
+                
+            Persistence se referencia com Domain (Persistence depende de Domain)
+                dotnet add .\ProEventos.Persistence\ reference .\ProEventos.Domain\  
+             
+        }
+    }
+
+    Entity Framework {
+
+        Migrations {
+            Para rodar as migrations o projeto classlib precisa se conectar ao banco de dados,
+                nessa estrutura a conexão é realizado no Startup de outro projeto (WebApi)
+                portanto no CLI das migrations precisamos exeplificar isso. ( Isso caso a camada de infra não tenha
+                um contexto para realizar as conexões (contextfactory))
+                dotnet ef migrations add InitialMigration --project "NameOfDbContextProject" --startup-project "NameOfWebUIProject"
+        }
+
+        Change Tracker {
+            O Change Tracker registra o estado atual de uma entidade
+             usando um dos quatro valores:
+
+            - Added - Entidades no estado Added serão inseridas como novos registros no banco de dados;
+            - Unchanged - Nenhuma ação será tomada em relação a entidades marcadas como Unchanged;
+            - Modified - As entidades no estado Modified terão seus valores atualizados no banco de dados para os valores de propriedade atuais;
+            - Deleted - Entidades no estado Deleted serão removidas do banco de dados;
+
+            O rastreamento de alterações começa assim que uma entidade é carregada. 
+             Uma entidade é carregada como resultado de um retorno de uma consulta ou por estar
+             sendo introduzida no contexto através de um dos seguintes métodos do 
+             DbContext : Add, Attach, Update e Remove, ou por ter sua propriedade de State 
+             definida na entidade de entrada retornada pela chamada do método de Entry do 
+             contexto.
+
+            Assim, o DbContext no Entity Framework é responsável pelo rastreamento das
+             alterações feitas na entidade ou no objeto, de modo que a atualização correta
+             é feita no banco de dados quando o método SaveChange() do contexto é chamado.
+            
+            Quando recuperamos entidades usando uma consulta de objeto, o Entity Framework coloca 
+             essas entidades em um cache e rastreia quaisquer alterações feitas nessas entidades até
+             que o método savechanges seja chamado, então Entity Framework rastreia os resultados da
+             consulta que retornam os tipos de entidade.
+
+            Às vezes, não queremos rastrear algumas entidades porque os dados são usados 
+             apenas para fins de exibição.
+
+            Nestes cenários desabilitar o rastreamento das consultas pode ser útil pois as
+             consultas serão executadas mais rápidamente porque não existe nenhuma necessidade
+             de obter informações do controle de alterações de configuração.
+
+            * Desabilitando o rastreamento a nivel de instancia de contexto  (Para todas os metodos da classe que usa esse contexto)
+                context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            
+            * Desabilitando o rastreamento a nivel de método. AsNoTracking
+                var paises = context.Paises.AsNoTracking().ToList();
+        }
+        
+    }
+
+
+    Interface - IActionResult {
+        Define um contrato que representa o resultado de um método de ação (StatusCode).
+    }
+
+
+}
