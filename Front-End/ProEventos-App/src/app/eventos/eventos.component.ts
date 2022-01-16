@@ -21,7 +21,6 @@ export class EventosComponent implements OnInit {
     this.eventosFiltrados = this._filtroLista
       ? this.filtrarEventos(this._filtroLista)
       : this.eventos;
-    console.log(this.eventos);
   }
 
   public filtrarEventos(filtrarPor: string): any {

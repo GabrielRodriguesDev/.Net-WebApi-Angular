@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using ProEventos.WebApi.Data;
+using ProEventos.Application.Interfaces;
+using ProEventos.Application.Services;
+using ProEventos.Persistence.Context;
+using ProEventos.Persistence.Implementations;
+using ProEventos.Persistence.Interfaces;
 
 namespace ProEventos.WebApi
 {
@@ -25,14 +23,23 @@ namespace ProEventos.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers(); // Adicionando o serviço de controllers
+            #region Controllers
+            // Adicionando o serviço de controllers e 
+            services.AddControllers()
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); //Configurando para ignorar as referencias circulares(isso porque estamos expondo as entidades e não objetos modelados para ir para a controoler)
+            #endregion
+
+            #region DI
+            services.AddScoped<IEventoService, EventoService>();
+            services.AddScoped<IEventoPersist, EventoPersist>();
+            #endregion
 
             #region DbContext
-            services.AddDbContext<DataContext>(context =>
+            services.AddDbContext<ProEventosContext>(context =>
             {
                 context.UseMySql(Configuration.GetConnectionString("Default"), ServerVersion.AutoDetect(Configuration.GetConnectionString("Default")));
             });
