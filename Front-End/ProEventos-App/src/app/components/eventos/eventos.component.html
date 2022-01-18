@@ -1,0 +1,67 @@
+<app-titulo titulo='Eventos'></app-titulo>
+
+<div class="row g-2 mb-2 align-items-center">
+  <div class="col-auto">
+    <label class="">Filtro: </label>
+  </div>
+  <div class="col-auto">
+    <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="filtroLista">
+  </div>
+</div>
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>
+        <button type="button" class="btn btn-outline-light btn-sm" (click)="alterarImagem()">
+          <i class="{{!exibirImagem ? 'fa fa-eye' : 'fa fa-eye-slash'}}"></i>
+          {{!exibirImagem ? 'Exibir' : 'Ocultar'}}</button>
+      </th>
+      <th>#</th>
+      <th>Tema</th>
+      <th>Local</th>
+      <th>Data</th>
+      <th>Qtd Pessoas</th>
+      <th>Lote</th>
+      <th>Opções</th>
+    </tr>
+  </thead>
+  <tbody class=".table-hover" *ngIf="eventos.length > 0">
+    <tr *ngFor="let evento of eventosFiltrados">
+      <td>
+        <div [collapse]="!exibirImagem" [isAnimated]="true">
+          <img src="/assets/{{evento.imagemURL}}" [style.max-width.px]="150" [style.max-height.px]="55"
+            [style.margin.px]="2">
+        </div>
+      </td>
+      <td>{{evento.id}}</td>
+      <td>{{evento.tema}}</td>
+      <td>{{evento.local}}</td>
+      <td>{{evento.dataEvento | date: "dd/MM/yyyy hh:mm"}}</td>
+      <td>{{evento.qtdPessoas}}</td>
+      <td>{{evento.lotes[0].nome}}</td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)=" openModal(template)">
+          <i class="fa fa-trash-alt"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="eventos.length == 0">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhum evento encontrado</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Tem certeza que deseja deletar este evento? </p>
+    <button type="button" class="btn btn-default" (click)="confirm()">Sim</button>
+    <button type="button" class="btn btn-primary" (click)="decline()">Não</button>
+  </div>
+</ng-template>

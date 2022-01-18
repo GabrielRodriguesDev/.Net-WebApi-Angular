@@ -1,0 +1,81 @@
+Organização {
+    Dentro do Angular, podemos fazer nossa Organização de módulos dentro do sistema,
+     devido a ser um Framework temos que criar nossos componentes e serviços conforme
+     o Framework manda.
+
+    Um projeto Angular ainda precisa ser bem estruturado por mais que o Framework gere tudo
+     seguindo o seu style guide que implementa muitos pattens, é possivel que com o mal uso
+     geramos um alto acoplamento.
+
+     Módulos {
+
+         Services {
+            Detém as chamadas externas e regra de negócio, existe para servir os componentes
+              e são usados através de injeção de dependencias no construtor.
+         }
+
+         Models {
+             Possui a modelagem de nossas entidades, para que possamos mapear os objetos nas chamadas http
+         }
+
+         Injeção de Depencias - Angular {
+            De acordo com a documentação oficial do Angular , injeção de dependência é
+             “um padrão de design no qual uma classe solicita dependências de fontes externas, em
+              vez de do que criá-los. 
+
+            O framework Angular DI torna as dependências disponíveis em todo o aplicativo,
+             fornecendo um injetor que mantém uma lista de todas as dependências do 
+             necessidades do aplicativo. Quando um componente ou serviço deseja usar uma
+             dependência, o injetor primeiro verifica se já criou uma instância dessa 
+             dependência. Caso contrário, ele cria uma nova, a retorna ao componente e
+             reserva uma cópia para uso posterior, de modo que da próxima vez que a mesma
+             dependência for solicitada, ele retorne a dependência reservada em vez de criar
+             uma nova.
+
+             Existem três formas de configurarmos uma classe no framework DI do angular{
+                 Adicionar configração providedIn no decorator @Injectable na classe que vai
+                  ser injetada (Geralmente serviços) {
+                     
+                     Usamos o decorator @Injectable para marcar que uma classe é injetavel
+                     após marcamos podemos configurar a injeção dela, uma das formas é adicionar
+                     uma configuração ao proprio decorartor da classe o providedIn: 'root'
+
+                     @Injectable({ providedIn: 'root',})
+
+                    Fazendo isso automaticamente essa classe marcada com o decorator @Injectable
+                    ficará disponivel para ser injetada em outras classes.
+                     
+                 }
+
+                 Providers no componente que vai receber a injeção {
+                     Podemos configurar a injeção no componente que deseja recebe-la, adicionando
+                     um atributo providers ao decorator @Component
+
+                     @Component({
+                        selector: 'app-eventos',
+                        templateUrl: './eventos.component.html',
+                        styleUrls: ['./eventos.component.scss'],
+                        providers: [EventoService]
+                        })
+                 }
+
+                 Configurando as DI de forma global no Módulo, fazendo isso os serviços,
+                 ficaram disponiveis para todos os componentes registrado nesse módulo,
+                 e teremos uma listagem dos providers que estão disponiveis para injeção {
+
+                     Dentro do decorator @NgModule no nosso módulo, podemos adicionar o atributo
+                      providers: [] e dentro dele listar as classes que vão ser expostas para a
+                      injeção de dependencia.
+                 }
+
+                 Só é necesário usar uma forma de cofiguração de injeção, e é recomendado
+                 que faça essa cofiguração através do módulo.
+
+                 O decorartor @Injectable() tem que estar presente na classe que vai ser injetada
+                 ele que identifica a classe como uma classe a ser configurada na injeção,
+                 sem ele não é possivel configurar uma classe para injeção.
+             }
+
+         }
+     }
+}
