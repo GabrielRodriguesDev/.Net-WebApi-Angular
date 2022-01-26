@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ProEventos.Application.Dtos;
 using ProEventos.Application.Interfaces;
-using ProEventos.Domain.Models;
-using ProEventos.Persistence.Context;
 
 namespace ProEventos.WebApi.Controllers
 {
@@ -22,14 +19,14 @@ namespace ProEventos.WebApi.Controllers
         }
         #region  CRUD
         [HttpPost]
-        public async Task<IActionResult> Post(Evento model)
+        public async Task<IActionResult> Post(EventoDto model)
         {
             try
             {
                 var evento = await _service.AddEventos(model);
                 if (evento == null) return BadRequest("Erro ao tentar adicionar avento.");
 
-                return Ok(evento);
+                return Created(new Uri($"{Request.Path}"), evento);
             }
             catch (Exception ex)
             {
@@ -38,7 +35,7 @@ namespace ProEventos.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Evento model)
+        public async Task<IActionResult> Put([FromBody] EventoDto model)
         {
             try
             {
@@ -58,13 +55,18 @@ namespace ProEventos.WebApi.Controllers
         {
             try
             {
+                var evento = await _service.GetEventosByIdAsync(id);
+                if (evento == null) return NoContent();
+
+
                 return await _service.DeleteEvento(id) ?
                     Ok("Deletado") :
-                    BadRequest("Evento não deletado");
+                    throw new Exception("Ocorreu um problema não especificado ao tentar deletar o Evento.");
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                $"Erro ao deletar eventos. Erro: {ex.Message}");
             }
         }
 
@@ -76,7 +78,7 @@ namespace ProEventos.WebApi.Controllers
             try
             {
                 var eventos = await _service.GetAllEventosAsync(true);
-                if (eventos == null) return NotFound("Nenhum evento encontrado.");
+                if (eventos == null) return NoContent();
 
                 return Ok(eventos);
             }
@@ -92,7 +94,7 @@ namespace ProEventos.WebApi.Controllers
             try
             {
                 var evento = await _service.GetEventosByIdAsync(id, true);
-                if (evento == null) return NotFound("Nenhum evento encontrado.");
+                if (evento == null) return NoContent();
                 return Ok(evento);
             }
             catch (Exception ex)
@@ -107,7 +109,7 @@ namespace ProEventos.WebApi.Controllers
             try
             {
                 var eventos = await _service.GetAllEventosByTemaAsync(tema, true);
-                if (eventos == null) return NotFound("Eventos por tema foram encontrados..");
+                if (eventos == null) return NoContent();
                 return Ok(eventos);
             }
             catch (Exception ex)

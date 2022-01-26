@@ -43,7 +43,16 @@ namespace ProEventos.Persistence.Implementations
 
         public async Task<bool> SaveChangesAsync()
         {
-            return (await _context.SaveChangesAsync()) > 0;
+            try
+            {
+                var teste = await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var testeTrhow = ex.Message;
+                return false;
+            }
         }
 
         #endregion

@@ -44,3 +44,9 @@ D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Newtonsoft.Json.dll
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
+D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\AutoMapper.dll
+D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Microsoft.Extensions.Options.dll
+D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
+D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\System.Runtime.CompilerServices.Unsafe.dll

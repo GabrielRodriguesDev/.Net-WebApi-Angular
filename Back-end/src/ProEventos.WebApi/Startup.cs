@@ -11,6 +11,8 @@ using ProEventos.Application.Services;
 using ProEventos.Persistence.Context;
 using ProEventos.Persistence.Implementations;
 using ProEventos.Persistence.Interfaces;
+using AutoMapper;
+using ProEventos.WebApi.Helpers;
 
 namespace ProEventos.WebApi
 {
@@ -31,6 +33,20 @@ namespace ProEventos.WebApi
             services.AddControllers()
             .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); //Configurando para ignorar as referencias circulares(isso porque estamos expondo as entidades e não objetos modelados para ir para a controoler)
+            #endregion
+
+            #region AutoMapper
+            //Dentro do dominio da minha aplicação - No dominio corrente (web api) - Procura qual assemblie está herdando de profiel.
+            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            var configMapper = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new ProEventosProfile());
+            });
+
+            IMapper mapper = configMapper.CreateMapper();
+            services.AddSingleton(mapper);
+
             #endregion
 
             #region DI
