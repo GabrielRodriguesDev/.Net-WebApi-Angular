@@ -105,6 +105,9 @@
             <label>Telefone</label>
             <input type="text" class="form-control" formControlName="telephone"
               [ngClass]="{'is-invalid': f.telephone.errors && f.telephone.touched}" />
+            <div class="invalid-feedback" *ngIf="f.telephone.errors?.required">
+              Telefone é obrigatório.
+            </div>
           </div>
           <div class="form-group col-sm">
             <label>Função</label>
