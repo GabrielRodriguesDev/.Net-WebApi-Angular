@@ -26,7 +26,7 @@ namespace ProEventos.WebApi.Controllers
                 var evento = await _service.AddEventos(model);
                 if (evento == null) return BadRequest("Erro ao tentar adicionar avento.");
 
-                return Created(new Uri($"{Request.Path}"), evento);
+                return Created(new Uri(Url.Link("GetById", new { id = evento.Id })), evento);
             }
             catch (Exception ex)
             {
@@ -60,7 +60,7 @@ namespace ProEventos.WebApi.Controllers
 
 
                 return await _service.DeleteEvento(id) ?
-                    Ok("Deletado") :
+                    Ok(new { message = "Deletado" }) :
                     throw new Exception("Ocorreu um problema não especificado ao tentar deletar o Evento.");
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ namespace ProEventos.WebApi.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetById")]
         public async Task<IActionResult> GetById(int id)
         {
             try

@@ -19,6 +19,8 @@ export class EventoListaComponent implements OnInit {
   public exibirImagem: boolean = true;
   private _filtroLista: string = '';
 
+  public eventId: number;
+
   public get filtroLista(): string {
     return this._filtroLista;
   }
@@ -71,16 +73,44 @@ export class EventoListaComponent implements OnInit {
   }
 
   //Modal
-  openModal(template: TemplateRef<any>): void {
+  openModal(event: any, template: TemplateRef<any>, eventId: number): void {
+    event.stopPropagation(); //Parando a propagação (não trocando a rota)
+    this.eventId = eventId;
     this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
   }
 
-  confirm(): void {
+  confirmDelete(): void {
     this.modalRef?.hide();
-    this.toastr.success('O evento foi deleado com sucesso', 'Deletado!');
+    this.spinner.show();
+    this.eventoService
+      .delete(this.eventId)
+      .subscribe({
+        next: (result: any) => {
+          console.log(result);
+          if (result.message === 'Deletado') {
+            this.toastr.success(
+              'O evento foi deleado com sucesso',
+              'Deletado!'
+            );
+            this.getEventos();
+          }
+        },
+        error: (error: any) => {
+          console.error(error);
+          this.toastr.error(
+            `Erro ao tentar deletar o evento ${this.eventId}`,
+            'Erro!'
+          );
+        },
+      })
+      .add(() => {
+        //Ao finalizar o processamento do subscribe, independente se deu erro ou sucesso. Ele cai aqui
+        // pois estamos adicionando um "ultimo recurso" a chamada antes do unsubscribe.
+        this.spinner.hide();
+      });
   }
 
-  decline(): void {
+  declineDelete(): void {
     this.modalRef?.hide();
   }
 
