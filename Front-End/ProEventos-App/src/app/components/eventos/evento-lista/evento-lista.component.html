@@ -39,14 +39,15 @@
         <td>{{evento.id}}</td>
         <td>{{evento.tema}}</td>
         <td class="d-none d-md-table-cell">{{evento.local}}</td>
-        <td>{{evento.dataEvento | date: "dd/MM/yyyy hh:mm"}}</td>
+        <td>{{evento.dataEvento | datetimeformatpipe}}</td>
         <td class="d-none d-md-table-cell">{{evento.qtdPessoas}}</td>
-        <td class="d-none d-md-table-cell">{{evento.lotes[0].nome}}</td>
+        <td class="d-none d-md-table-cell">{{evento.lotes[0]?.nome}}</td>
         <th>
           <button type="button" class="btn btn-primary btn-sm me-2 d-none d-md-table-cell" tooltip="Editar">
             <i class="fa fa-edit"></i>
           </button>
-          <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)=" openModal(template)">
+          <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir"
+            (click)=" openModal($event, template, evento.id)">
             <i class="fa fa-trash-alt"></i>
           </button>
         </th>
@@ -63,8 +64,8 @@
 </div>
 <ng-template #template>
   <div class="modal-body text-center">
-    <p>Tem certeza que deseja deletar este evento? </p>
-    <button type="button" class="btn btn-default" (click)="confirm()">Sim</button>
-    <button type="button" class="btn btn-primary" (click)="decline()">Não</button>
+    <p>Tem certeza que deseja deletar o Evento de Código {{eventId}}? </p>
+    <button type="button" class="btn btn-default" (click)="confirmDelete()">Sim</button>
+    <button type="button" class="btn btn-primary" (click)="declineDelete()">Não</button>
   </div>
 </ng-template>
