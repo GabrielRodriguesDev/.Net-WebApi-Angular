@@ -6,6 +6,7 @@ using ProEventos.Application.Dtos;
 using ProEventos.Application.Interfaces;
 
 namespace ProEventos.WebApi.Controllers
+
 {
     [ApiController]
     [Route("[controller]")]
