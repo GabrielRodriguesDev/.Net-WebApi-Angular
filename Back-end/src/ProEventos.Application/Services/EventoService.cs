@@ -41,8 +41,6 @@ namespace ProEventos.Application.Services
         {
             try
             {
-
-
                 var evento = await _persist.GetEventosByIdAsync(model.Id);
                 if (evento == null) return null;
 

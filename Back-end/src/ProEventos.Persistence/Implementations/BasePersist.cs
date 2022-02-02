@@ -36,11 +36,6 @@ namespace ProEventos.Persistence.Implementations
             _dataset.Remove(item);
         }
 
-        public void DeleteRange(T[] itemArray)
-        {
-            _context.RemoveRange(itemArray);
-        }
-
         public async Task<bool> SaveChangesAsync()
         {
             try
@@ -50,7 +45,6 @@ namespace ProEventos.Persistence.Implementations
             }
             catch (Exception ex)
             {
-                var testeTrhow = ex.Message;
                 return false;
             }
         }

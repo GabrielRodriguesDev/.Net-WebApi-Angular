@@ -36,7 +36,7 @@ namespace ProEventos.WebApi
             #endregion
 
             #region AutoMapper
-            //Dentro do dominio da minha aplicação - No dominio corrente (web api) - Procura qual assemblie está herdando de profiel.
+            //Dentro do dominio da minha aplicação - No dominio corrente (web api) - Procura qual assemblie está herdando de profile.
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var configMapper = new AutoMapper.MapperConfiguration(cfg =>
@@ -52,6 +52,8 @@ namespace ProEventos.WebApi
             #region DI
             services.AddScoped<IEventoService, EventoService>();
             services.AddScoped<IEventoPersist, EventoPersist>();
+            services.AddScoped<ILotePersist, LotePersist>();
+            services.AddScoped<ILoteService, LoteService>();
             #endregion
 
             #region DbContext
