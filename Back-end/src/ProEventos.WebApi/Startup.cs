@@ -13,6 +13,7 @@ using ProEventos.Persistence.Implementations;
 using ProEventos.Persistence.Interfaces;
 using AutoMapper;
 using ProEventos.WebApi.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace ProEventos.WebApi
 {
@@ -59,7 +60,8 @@ namespace ProEventos.WebApi
             #region DbContext
             services.AddDbContext<ProEventosContext>(context =>
             {
-                context.UseMySql(Configuration.GetConnectionString("Default"), ServerVersion.AutoDetect(Configuration.GetConnectionString("Default")));
+                context.UseMySql(Configuration.GetConnectionString("Default"), ServerVersion.AutoDetect(Configuration.GetConnectionString("Default"))).LogTo(Console.WriteLine, LogLevel.Information);
+                context.EnableSensitiveDataLogging();
             });
             #endregion
 

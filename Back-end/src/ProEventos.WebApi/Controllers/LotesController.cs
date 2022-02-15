@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ProEventos.Application.Dtos;
 using ProEventos.Application.Interfaces;
 
@@ -15,9 +16,13 @@ namespace ProEventos.WebApi.Controllers
     {
         private readonly ILoteService _service;
 
-        public LotesController(ILoteService service)
+        private readonly ILogger<LotesController> _logger;
+
+
+        public LotesController(ILoteService service, ILogger<LotesController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
 
@@ -34,10 +39,12 @@ namespace ProEventos.WebApi.Controllers
                 var result = await _service.GetLotesByEventoIdAsync(eventoId);
                 if (result.Length == 0) return NoContent();
 
+                _logger.LogInformation("Sucesso no Get de Lotes");
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("Exception no Get de Lotes");
                 return StatusCode((int)HttpStatusCode.InternalServerError,
                 $"Erro ao tentar recuperar os lotes. Erro: {ex.Message}");
             }

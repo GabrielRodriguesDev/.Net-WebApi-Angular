@@ -40,11 +40,12 @@ namespace ProEventos.Persistence.Implementations
         {
             try
             {
-                var teste = await _context.SaveChangesAsync();
+                var commit = await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.InnerException.Message);
                 return false;
             }
         }

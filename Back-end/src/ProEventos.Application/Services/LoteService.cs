@@ -6,6 +6,7 @@ using AutoMapper;
 using ProEventos.Application.Dtos;
 using ProEventos.Application.Interfaces;
 using ProEventos.Domain.Models;
+using ProEventos.Persistence.Context;
 using ProEventos.Persistence.Interfaces;
 
 namespace ProEventos.Application.Services
@@ -13,12 +14,17 @@ namespace ProEventos.Application.Services
     public class LoteService : ILoteService
     {
         private readonly ILotePersist _persist;
+
+        
         private readonly IMapper _mapper;
+
+
 
         public LoteService(ILotePersist persist, IMapper mapper)
         {
             _persist = persist;
             _mapper = mapper;
+            
         }
 
 
@@ -74,9 +80,11 @@ namespace ProEventos.Application.Services
             try
             {
                 model.EventoId = eventoId;
-                _persist.Add(_mapper.Map<Lote>(model));
+                var entity = _mapper.Map<Lote>(model);
+                
+                _persist.Add(entity);
                 return await _persist.SaveChangesAsync();
-
+                
             }
             catch (Exception ex)
             {
@@ -118,7 +126,8 @@ namespace ProEventos.Application.Services
                         }
                     }
                     else
-                    {
+                    {   
+                        model.EventoId = eventoId;
                         UpdateLote(listEntity, model);
                     }
                 }

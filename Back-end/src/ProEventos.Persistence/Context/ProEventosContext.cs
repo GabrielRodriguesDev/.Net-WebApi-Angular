@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using MySqlConnector.Logging;
 using ProEventos.Domain.Models;
 
 namespace ProEventos.Persistence.Context
@@ -10,6 +12,7 @@ namespace ProEventos.Persistence.Context
     public class ProEventosContext : DbContext
     {
         public ProEventosContext(DbContextOptions<ProEventosContext> options) : base(options) { }
+
 
         public DbSet<Evento> Eventos { get; set; }
 
@@ -23,6 +26,7 @@ namespace ProEventos.Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<PalestranteEvento>() // Configurando tabela com relacionamento muitos para muitos
                 .HasKey(PE => new { PE.EventoId, PE.PalestranteId });
 
