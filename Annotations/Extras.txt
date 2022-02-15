@@ -1,38 +1,5 @@
 Conceitos extras compreendidos durante o curso {
-    Diferença entre o IQueryable e IEnumerable {
-        O primeiro ponto importante a destacar é que a interface IQueryable herda de IEnumerable,
-         de forma que tudo que IEnumerable pode fazer, IQueryable também pode, mas existe uma 
-         grande diferença...
+    
 
-        A interface IQueryable é útil quando você esta consultando uma coleção que foi carregada
-         usando LINQ ou Entity Framework e você quer aplicar um filtro nesta coleção. 
-        
-        Exemplo:
-
-        1- Na consulta abaixo usamos IEnumerable com Entity Framework onde temos um contexto
-         definido como CadastroEntities e estamos realizando uma consulta para filtrar o
-         cliente com código igual a 2 :
-
-
-        MyContext dBContext = new MyContext();
-        IEnumerable<Cliente> result = dBContext.Clientes.Where(cliete => cliente.Id == 2)
-
-        O filtro usado na cláusula Where é executado no Cliente (Aplicação ASP.NET) 
-         onde o código IEnumerable esta; ou seja, todos os dados são obtidos do banco de dados
-         e então no cliente ele filtra o registro com Id igual a 2.
-        
-        Assim, todos os clientes virão do banco de dados e depois serão analisados um a um
-         na cláusula Where.
-
-        1- Na mesma consulta, usamos agora a interface IQueryable com Entity Framework:
-        IEnumerable<Cliente> result = dBContext.Clientes.Where(cliete => cliente.Id == 2)
-
-        Neste caso o filtro é aplicado no banco de dados usando uma consulta SQL; de forma que
-         o cliente envia uma solicitação ao servidor e uma consulta Select é disparada no banco
-         de dados e somente os dados necessários são retornados.
-
-        A utilização do IQueryable<T> permite a construção de árvores de expressões de consulta.
-         É mais indicado para utilizar com banco de dados (LINQ TO SQL) e outras fontes remotas,
-         principalmente quando precisa de paginação de resultados.
-    }
+   
 }

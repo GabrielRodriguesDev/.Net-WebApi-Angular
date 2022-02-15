@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import {
+  AbstractControl,
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -13,16 +15,26 @@ import { Evento } from '@app/models/Evento';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { NgxSpinnerService, Spinner } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { Lote } from '@app/models/Lote';
+import { LoteService } from '@app/services/lote.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DateFormatPipe } from '@app/helpers/date-format.pipe';
+import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
+import { normalizeObjectUnits } from 'ngx-bootstrap/chronos/units/aliases';
 
 @Component({
   selector: 'app-evento-detalhe',
   templateUrl: './evento-detalhe.component.html',
   styleUrls: ['./evento-detalhe.component.scss'],
+  providers: [DateFormatPipe]
 })
 export class EventoDetalheComponent implements OnInit {
   form: FormGroup;
   evento = {} as Evento; //Objeto vazio do tipo evento.
   saveMode = 'post';
+  eventId: number;
+  modalRef?: BsModalRef;
+  currentBatch = {id: 0, name: '', index: 0};
 
   get f(): any {
     return this.form.controls;
@@ -38,14 +50,32 @@ export class EventoDetalheComponent implements OnInit {
     };
   }
 
+  get bsConfigNotTime(): any {
+    return{
+      adaptivePosition: true,
+      isAnimated: true,
+      dateInputFormat: 'DD/MM/YYYY',
+      containerClass: 'theme-default',
+      showWeekNumbers: false,
+    }
+  }
+
+  get lotes(): FormArray {
+    //Get que retorna os lotes, que são um item no Formulario, e dizendo que é um FormArray
+    return this.form.get('lotes') as FormArray;
+  }
+
   constructor(
     private formbuilder: FormBuilder,
     private localeService: BsLocaleService,
     private routerActivated: ActivatedRoute,
     private eventoService: EventoService,
+    private loteService: LoteService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private modalService: BsModalService,
+    private datePipe: DateFormatPipe
   ) {}
 
   ngOnInit(): void {
@@ -70,20 +100,68 @@ export class EventoDetalheComponent implements OnInit {
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       imagemURL: ['', Validators.required],
+      lotes: this.formbuilder.array([]), //Adicionando mais uma matriz de formbuilder, e passando um array vazio como valor, pois esse array vai ser populado em tempo de execução
     });
   }
 
-  loadEvent(): void {
-    const eventIdParam = this.routerActivated.snapshot.paramMap.get('id');
+  saveEvent(): void {
+    this.spinner.show();
+    if (this.form.valid) {
+      this.evento =
+        this.saveMode === 'post'
+          ? { ...this.form.value }
+          : { id: this.evento.id, ...this.form.value };
+      this.eventoService[this.saveMode](this.evento).subscribe({
+        next: (result: any) => {
+          this.toastr.success('Evento salvo com sucesso!', 'Sucesso!');
+          this.router.navigate([`/eventos/detalhe/${result.id}`]);
+          console.log(result);
+        },
+        error: (error: any) => {
+          console.error(error);
+          this.spinner.hide();
+          this.toastr.error('Erro ao salvar o evento.', 'Erro!');
+        },
+        complete: (result: Evento) => {
+          this.spinner.hide();
+        },
+      });
+    }
+  }
 
-    if (eventIdParam !== null) {
+
+  createBatch(lote: Lote): FormGroup {
+    return this.formbuilder.group({
+      id: [lote.id],
+      nome: [lote.nome, Validators.required],
+      preco: [lote.preco, Validators.required],
+      dataInicio: [lote.dataInicio , Validators.required],
+      dataFim: [lote.dataFim],
+      quantidade: [lote.quantidade],
+    });
+  }
+
+
+  changingTheBatchDateValue(value: Date, index: number, field: string): void {
+    this.lotes[index][field] = value;
+  }
+
+  loadEvent(): void {
+    this.eventId = +this.routerActivated.snapshot.paramMap.get('id');
+
+    if (this.eventId !== null && this.eventId !== 0) {
       this.spinner.show();
       this.saveMode = 'put';
-      this.eventoService.getEventoById(+eventIdParam).subscribe({
+      this.eventoService.getEventoById(this.eventId).subscribe({
         // simbolo de "+" converte string em int
         next: (evento: Evento) => {
           this.evento = { ...evento };
           this.form.patchValue(this.evento);
+          console.log(evento);
+          console.log(evento.lotes);
+          this.evento.lotes.forEach(lote => {
+            this.lotes.push(this.createBatch(lote));
+          });
         },
         error: (error: any) => {
           console.log(error);
@@ -97,38 +175,99 @@ export class EventoDetalheComponent implements OnInit {
     }
   }
 
-  saveChanges(): void {
-    this.spinner.show();
-    if (this.form.valid) {
-      this.evento =
-        this.saveMode === 'post'
-          ? { ...this.form.value }
-          : { id: this.evento.id, ...this.form.value };
-      this.eventoService[this.saveMode](this.evento).subscribe({
-        next: (result: any) => {
-          console.log(result);
-          this.toastr.success('Evento salvo com sucesso!', 'Sucesso!');
+  addBatch(): void {
+    this.lotes.push(this.createBatch({ id: 0 } as Lote)); // Para cada lote
+  }
+
+  removeBatch(index: number, template: TemplateRef<any>): void {
+
+    this.currentBatch.id = this.lotes.get(index + '.id').value;
+    this.currentBatch.name = this.lotes.get(index + '.nome').value;
+    this.currentBatch.index = index;
+    console.log(this.lotes.get(this.currentBatch.index + '.id').value);
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm'})
+
+
+  }
+
+  saveBatch(): void {
+    if (this.form.controls.lotes.valid) {
+      this.spinner.show();
+      this.loteService.postLote(this.eventId, this.form.value.lotes).subscribe({
+        next: (result: Lote[]) => {
+          console.log(result)
+          console.log(this.form.controls.lotes.value);
+          this.toastr.success('Lotes salvo com sucesso!', 'Sucesso!');
         },
         error: (error: any) => {
           console.error(error);
           this.spinner.hide();
-          this.toastr.error('Erro ao salvar o evento.', 'Erro!');
+          this.toastr.error('Erro ao salvar os lotes.', 'Erro!');
         },
-        complete: () => {
+        complete:() => {
           this.spinner.hide();
-          this.router.navigate(['/eventos']);
-        },
+        }
       });
     }
   }
 
-  resetForm(): void {
-    this.form.reset();
+  loadBatch(): void {
+    this.loteService.getLotesById(this.eventId).subscribe({
+      next: (result: Lote[]) => {
+        if(result !== null) {
+          console.log(result)
+          result.forEach(lote => this.lotes.push(this.createBatch(lote)) )
+        }
+      },
+      error: (error: any) => {
+        console.error(error);
+        this.toastr.error('Erro ao tentar carregar os lotes', 'Erro!');
+        this.spinner.hide();
+      },
+      complete: ()=> {
+        this.spinner.hide();
+      }
+    })
   }
 
-  validateInvalidField(formField: FormControl): any {
+  declineDelete(): void {
+    this.modalRef?.hide();
+  }
+
+  confirmDelete(): void {
+    this.modalRef?.hide();
+    //
+    this.spinner.show();
+    this.loteService.deleteLote(this.eventId, this.currentBatch.id).subscribe({
+      next:(result: any) => {
+        console.log(result);
+        this.toastr.success('Lotes salvo com sucesso!', 'Sucesso!');
+        this.lotes.removeAt(this.currentBatch.index);
+
+      },
+      error:(error: any) => {
+        console.error(error);
+        this.toastr.error(`Erro ao tentar excluir o lote ${this.currentBatch.id}`, 'Erro!');
+        this.spinner.hide();
+      },
+      complete:() => {
+        this.spinner.hide();
+      }
+    })
+  }
+
+  cancelingTheChange(): void {
+    this.router.navigate(['/eventos']);
+  }
+
+  validateInvalidField(formField: FormControl | AbstractControl): any {
     return { 'is-invalid': formField.errors && formField.touched };
   }
+
+  returnsTheBatchTitle(nome: string): string {
+    return nome === null || nome === '' ? 'Nome do lote' : nome
+  }
+
 
   applyLocaleDatePicker(): void {
     this.localeService.use('pt-br');

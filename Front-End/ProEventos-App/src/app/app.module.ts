@@ -8,10 +8,12 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
+
+import { NgxCurrencyModule } from 'ngx-currency';
+
 
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -34,6 +36,8 @@ import { EventoListaComponent } from './components/eventos/evento-lista/evento-l
 import { UserComponent } from './components/user/user.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { RegistrationComponent } from './components/user/registration/registration.component';
+import { LoteService } from './services/lote.service';
+import { DateFormatPipe } from './helpers/date-format.pipe';
 
 defineLocale('pt-br', ptBrLocale);
 
@@ -48,11 +52,14 @@ defineLocale('pt-br', ptBrLocale);
     DashboardComponent,
     PerfilComponent,
     DateTimeFormatPipe,
+    DateFormatPipe,
     EventoDetalheComponent,
     EventoListaComponent,
     UserComponent,
     LoginComponent,
     RegistrationComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -73,9 +80,10 @@ defineLocale('pt-br', ptBrLocale);
     }),
     BsDatepickerModule.forRoot(),
     NgxSpinnerModule,
+    NgxCurrencyModule
   ],
 
-  providers: [EventoService],
+  providers: [EventoService, LoteService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
