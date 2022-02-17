@@ -14,6 +14,8 @@ using ProEventos.Persistence.Interfaces;
 using AutoMapper;
 using ProEventos.WebApi.Helpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace ProEventos.WebApi
 {
@@ -83,6 +85,8 @@ namespace ProEventos.WebApi
                 });
             });
             #endregion
+            
+
         }
 
 
@@ -100,7 +104,18 @@ namespace ProEventos.WebApi
                 });
             }
 
-            app.UseStaticFiles(); //permite que os arquivos estáticos sejam atendidos: SwaggerDark.css
+
+
+            #region StaticFiles
+            app.UseStaticFiles( new StaticFileOptions {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Resources")
+                ), RequestPath = "/Resources"
+                //permite que os arquivos estáticos sejam atendidos: SwaggerDark.css ou até mesmo as imagens de upload "Resources"
+            }); 
+            #endregion
+            
+            
 
             app.UseHttpsRedirection();
 

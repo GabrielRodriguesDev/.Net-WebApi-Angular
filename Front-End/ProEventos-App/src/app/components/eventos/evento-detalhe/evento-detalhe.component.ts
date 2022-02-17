@@ -135,9 +135,9 @@ export class EventoDetalheComponent implements OnInit {
       id: [lote.id],
       nome: [lote.nome, Validators.required],
       preco: [lote.preco, Validators.required],
-      dataInicio: [lote.dataInicio , Validators.required],
+      dataInicio: [lote.dataInicio],
       dataFim: [lote.dataFim],
-      quantidade: [lote.quantidade],
+      quantidade: [lote.quantidade, Validators.required],
     });
   }
 

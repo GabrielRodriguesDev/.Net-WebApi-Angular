@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "pzU/9gfY1Ugu8nEicv8Lv7IEvhGq1c9niY7j67c3LmZqSfPib9ZZVJbC4fZweOuenB4gY2He6KE2LHL/MdKOLQ==",
+  "dgSpecHash": "Gt1iSP2Ia2ubbkyR4+99c/gKYhwd7YDIvRV3DVnIe01Ecxc7A9ewvJ7s+XSWalzy5d8Nd9yKx5yL1TYq7UONDA==",
   "success": true,
   "projectFilePath": "D:\\Technology\\Sistemas\\Gabriel\\Full-Stack\\Udemy\\.Net-WebApi-Angular\\Back-end\\src\\ProEventos.WebApi\\ProEventos.WebApi.csproj",
   "expectedPackageFiles": [
@@ -35,7 +35,8 @@
     "C:\\Users\\gabri\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512",
-    "C:\\Users\\gabri\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+    "C:\\Users\\gabri\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\gabri\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.13\\microsoft.netcore.app.host.win-x64.5.0.13.nupkg.sha512"
   ],
   "logs": []
 }

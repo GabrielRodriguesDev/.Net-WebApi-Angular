@@ -156,7 +156,7 @@
                 bsDatepicker
                 [bsConfig]="bsConfigNotTime"
                 value="{{lote.get('dataFim').value | date: 'dd/MM/yyyy'}}"
-                placeholder="01/01/2019"
+                placeholder="dd/mm/yyyy"
                 >
               </div>
             </div>
@@ -174,7 +174,7 @@
       <button class="btn btn-outline-secondary mr-auto border">
         Cancelar Alteração
       </button>
-      <button class="btn btn-success" (click)="saveBatch()" [disabled]="!form.controls.lotes">
+      <button class="btn btn-success" (click)="saveBatch()">
         Salvar Lotes
       </button>
     </div>

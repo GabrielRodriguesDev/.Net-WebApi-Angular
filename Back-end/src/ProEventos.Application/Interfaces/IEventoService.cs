@@ -15,7 +15,7 @@ namespace ProEventos.Application.Interfaces
 
         Task<bool> DeleteEvento(int id);
 
-        Task<EventoDto> GetEventosByIdAsync(int id, bool includePalestrantes = false);
+        Task<EventoDto> GetEventoByIdAsync(int id, bool includePalestrantes = false);
 
         Task<EventoDto[]> GetAllEventosByTemaAsync(string tema, bool includePalestrantes = false);
 
