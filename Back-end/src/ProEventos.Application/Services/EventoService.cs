@@ -27,7 +27,7 @@ namespace ProEventos.Application.Services
                 _persist.Add(evento);
                 if (await _persist.SaveChangesAsync())
                 {
-                    return await GetEventoByIdAsync(evento.Id);
+                    return await GetEventosByIdAsync(evento.Id);
                 }
                 return null;
             }
@@ -75,7 +75,7 @@ namespace ProEventos.Application.Services
             }
         }
 
-        public async Task<EventoDto> GetEventoByIdAsync(int id, bool includePalestrantes = false)
+        public async Task<EventoDto> GetEventosByIdAsync(int id, bool includePalestrantes = false)
         {
             try
             {
