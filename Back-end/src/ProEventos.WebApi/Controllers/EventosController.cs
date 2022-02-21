@@ -22,6 +22,7 @@ namespace ProEventos.WebApi.Controllers
         public EventosController(IEventoService service, IWebHostEnvironment hostEnvironment)
         {
             _service = service;
+            _hostEnvironment = hostEnvironment;
         }
         #region  CRUD
         [HttpPost]
@@ -90,9 +91,14 @@ namespace ProEventos.WebApi.Controllers
                 if (evento == null) return NoContent();
 
 
-                return await _service.DeleteEvento(id) ?
-                    Ok(new { message = "Deletado" }) :
+                if (await _service.DeleteEvento(id)) {
+                    DeleteImage(evento.ImagemURL);
+                    return Ok(new { message = "Deletado" });
+                } else
+                {
                     throw new Exception("Ocorreu um problema não especificado ao tentar deletar o Evento.");
+                }
+
             }
             catch (Exception ex)
             {
@@ -161,12 +167,14 @@ namespace ProEventos.WebApi.Controllers
             {
                 await imageFile.CopyToAsync(fileStream);
             }
-            return "string";    
+            return imageName;    
         }
 
         [NonAction]
         public void DeleteImage(string imageName) {
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Rosources/images", imageName);
+
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath,  @"Resources/images", imageName);
+
 
             if(System.IO.File.Exists(imagePath))
             System.IO.File.Delete(imagePath);
