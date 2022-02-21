@@ -19,7 +19,6 @@ D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\ProEventos.WebApi.MvcApplicationPartsAssemblyInfo.cs
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\ProEventos.WebApi.MvcApplicationPartsAssemblyInfo.cache
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\staticwebassets\ProEventos.WebApi.StaticWebAssets.Manifest.cache
-D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\staticwebassets\ProEventos.WebApi.StaticWebAssets.xml
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\scopedcss\bundle\ProEventos.WebApi.styles.css
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\ProEventos.WebApi.RazorTargetAssemblyInfo.cache
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\ProEventos.WebApi.csproj.CopyComplete
@@ -50,3 +49,4 @@ D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Microsoft.Extensions.Options.dll
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
 D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\bin\Debug\net5.0\System.Runtime.CompilerServices.Unsafe.dll
+D:\Technology\Sistemas\Gabriel\Full-Stack\Udemy\.Net-WebApi-Angular\Back-end\src\ProEventos.WebApi\obj\Debug\net5.0\staticwebassets\ProEventos.WebApi.StaticWebAssets.xml

@@ -21,6 +21,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DateFormatPipe } from '@app/helpers/date-format.pipe';
 import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
 import { normalizeObjectUnits } from 'ngx-bootstrap/chronos/units/aliases';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-evento-detalhe',
@@ -35,6 +36,8 @@ export class EventoDetalheComponent implements OnInit {
   eventId: number;
   modalRef?: BsModalRef;
   currentBatch = {id: 0, name: '', index: 0};
+  imageUrl = 'assets/svg/upload.svg';
+  file: File;
 
   get f(): any {
     return this.form.controls;
@@ -99,7 +102,7 @@ export class EventoDetalheComponent implements OnInit {
       qtdPessoas: ['', [Validators.required, Validators.max(120000)]],
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      imagemURL: ['', Validators.required],
+      imagemURL: [''],
       lotes: this.formbuilder.array([]), //Adicionando mais uma matriz de formbuilder, e passando um array vazio como valor, pois esse array vai ser populado em tempo de execução
     });
   }
@@ -135,9 +138,9 @@ export class EventoDetalheComponent implements OnInit {
       id: [lote.id],
       nome: [lote.nome, Validators.required],
       preco: [lote.preco, Validators.required],
-      dataInicio: [lote.dataInicio , Validators.required],
+      dataInicio: [lote.dataInicio],
       dataFim: [lote.dataFim],
-      quantidade: [lote.quantidade],
+      quantidade: [lote.quantidade, Validators.required],
     });
   }
 
@@ -157,8 +160,9 @@ export class EventoDetalheComponent implements OnInit {
         next: (evento: Evento) => {
           this.evento = { ...evento };
           this.form.patchValue(this.evento);
-          console.log(evento);
-          console.log(evento.lotes);
+          if(this.evento.imagemURL !== '') {
+            this.imageUrl = environment.apiURL + 'resources/images/' + this.evento.imagemURL;
+          }
           this.evento.lotes.forEach(lote => {
             this.lotes.push(this.createBatch(lote));
           });
@@ -167,6 +171,7 @@ export class EventoDetalheComponent implements OnInit {
           console.log(error);
           this.spinner.hide();
           this.toastr.error('Erro ao tentar carregar evento', 'Erro!');
+          this.router.navigate(['/eventos']);
         },
         complete: () => {
           this.spinner.hide();
@@ -271,5 +276,35 @@ export class EventoDetalheComponent implements OnInit {
 
   applyLocaleDatePicker(): void {
     this.localeService.use('pt-br');
+  }
+
+
+  onFileChange(event: any):void {
+    const reader = new FileReader();
+
+    reader.onload = (event: any) => this.imageUrl = event.target.result;
+
+    this.file = event.target.files;
+    reader.readAsDataURL(this.file[0]);
+
+    this.uploadImage();
+  }
+
+  uploadImage(): void{
+    this.spinner.show();
+    this.eventoService.postUpload(this.eventId, this.file).subscribe({
+      next: () =>{
+        this.loadEvent();
+        this.toastr.success('Imagem atualizada com sucesso', 'Sucesso!')
+      },
+      error: (error: any) => {
+        console.error(error);
+        this.spinner.hide();
+        this.toastr.error('Erro ao salvar a imagem.', 'Erro!');
+      },
+      complete:() => {
+        this.spinner.hide();
+      }
+    });
   }
 }
